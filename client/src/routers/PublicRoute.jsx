@@ -1,13 +1,13 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom'
-import { useUserStore } from '../store/userStore';
 import routes from '../../../shared/routes';
+import useAuthStore from '../store/authStore';
 
 const PublicRoute = ({ children }) => {
-  const isLogged = useUserStore(state => state.isLogged)
-
+  const isLoged = useAuthStore(state => state.isLoged)
+  console.log(isLoged);
   //if there is a Logged user navigate to the dashboard
-  if (isLogged) {
+  if (isLoged) {
     return <Navigate to={routes.dashboard.home} replace />
   }
 

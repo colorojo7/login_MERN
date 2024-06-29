@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { Toaster, toast } from "sonner";
+
 import { useUserStore } from "../../store/userStore.js";
+import routes from "../../../../shared/routes.js";
 
 import Button from "../Button";
-import Error from "../Error.jsx";
-import Success from "../Success.jsx";
 import Spinner from "../Spinner.jsx";
-import routes from "../../../../shared/routes.js";
+
 
 const RegisterEmailForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,19 +21,27 @@ const RegisterEmailForm = () => {
 
   //const [email, setEmail] = useState("");
   const registerEmail = useUserStore((state) => state.registerEmail);
-  const user = useUserStore((state) => state.user);
-  const cleanUser = useUserStore((state) => state.cleanUser);
+  const registerEmailResponse = useUserStore( (state) => state.registerEmailResponse );
+  const Clear_registerEmailResponse = useUserStore( (state) => state.Clear_registerEmailResponse );
+
+  
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    try {
-      await registerEmail(data.email);
+    try { 
+      const res = await registerEmail(data.email);
+      res?.error && toast.error(res.message);
+      res?.ok && toast.success(res.message);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      console.log(error);
     }
   };
+
+  useEffect(()=>{
+    return Clear_registerEmailResponse()
+  },[])
+
 
   return (
     <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
@@ -64,30 +73,29 @@ const RegisterEmailForm = () => {
           )}
         </div>
 
-        {user?.error && <Error>{user.message}</Error>}
 
-        {user?.ok ? (
-          <Success className="flex flex-row justify-between">
-            <div>{user.message}</div>
-            <Link
-              onClick={() => cleanUser()}
-              to={routes.register.user}
-              className=" border rounded-lg px-2 border-green-300 hover:bg-green-500 bg-transparent  hover:text-green-800 hover:border-transparent"
-            >
-              Finish 
-            </Link>
-          </Success>
-        ) : (
-          <div className="flex justify-center">
-            <Button
-              textCenter={true}
-              className={isLoading && "cursor-not-allowed"}
-            >
-              {isLoading ? <Spinner /> : "Register e-mail"}
-            </Button>
-          </div>
-        )}
+        <div className="flex justify-center">
+          <Button
+            textCenter={true}
+            className={`${isLoading && "cursor-not-allowed disabled"} ${registerEmailResponse?.ok && "hidden"}`}
+            disabled={isLoading}
+          >
+            {isLoading ? <Spinner /> : "Register e-mail"}
+          </Button>
+
+
+          {registerEmailResponse?.ok&&
+              <Link to={routes.register.user}>
+                <Button
+                  textCenter={true}
+                >
+                    Complete registration
+                </Button>
+              </Link>
+          }
+        </div>
       </form>
+      <Toaster visibleToasts={1} richColors={true} />
     </div>
   );
 };

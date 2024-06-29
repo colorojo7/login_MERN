@@ -1,4 +1,6 @@
 import { API_HOST } from "../../config.js";
+
+
 export const fetchPOST = async (endpoint, bodyObj) => {
   try {
     const response = await fetch(`${ API_HOST }${endpoint}`, {
@@ -12,7 +14,7 @@ export const fetchPOST = async (endpoint, bodyObj) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log(error);
+    console.log("UPS, fetchPOST got an error =>",error);
   } 
 };
     
@@ -35,6 +37,6 @@ export const fetchGET = async (endpoint) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("UPS, We couldn't fetch that",error);
+    console.log("UPS, fetchGET got an error =>",error);
   }
 };

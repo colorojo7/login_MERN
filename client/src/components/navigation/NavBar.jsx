@@ -1,16 +1,16 @@
 import React from "react";
 import NavLinks from "./NavLinks";
 import {PowerIcon} from "@heroicons/react/24/outline"
-import { useUserStore } from "../../store/userStore";
+import useAuthStore from "../../store/authStore";
 
 const NavBar = () => {
-  const logOut = useUserStore(state=>state.logOut)
-  const user = useUserStore(state=>state.user)
+  const logout = useAuthStore(state=>state.logout)
+  const user = useAuthStore(state=>state.user)
 
   console.log("user en nav",user);
   const handleLogOut = () => {
     console.log("handleLogOut");
-    logOut()
+    logout()
   };
 
   return (

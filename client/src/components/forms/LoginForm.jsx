@@ -1,32 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useUserStore } from "../../store/userStore.js";
+import { Toaster, toast } from "sonner";
 
-import Button from "../Button";
+import useAuthStore from "../../store/authStore.js";
+
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import Error from "../Error.jsx";
+import Button from "../Button";
 
 const LoginForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const login = useAuthStore((state) => state.login);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  // const [email, setEmail] = useState('')
-  // const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false);
-
-  const logUser = useUserStore((state) => state.login);
-  const user = useUserStore((state) => state.user);
-
-  const handleLogin = (data) => {
+  const handleLogin = async (data) => {
     try {
-      logUser(data.email, data.password);
+          const res = await login(data.email, data.password);
+          res.error &&toast.error(res.message);
+          res?.ok && toast.success(res.message);
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
   };
+
 
   return (
     <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
@@ -44,7 +45,9 @@ const LoginForm = () => {
               required: "Required",
             })}
           />
-          {errors.email && <p className="text-red-500 text-xs ps-5">{errors.email.message}</p>}
+           {errors.email && (
+            <p className="text-red-500 text-xs ps-5">{errors.email.message}</p>
+          )}
 
           <div className="flex flex-row gap-3">
             <input
@@ -57,6 +60,7 @@ const LoginForm = () => {
                 required: "Required",
               })}
             />
+            
             <div
               onClick={() => setShowPassword(!showPassword)}
               className="text-blue-500 py-2 w-6"
@@ -64,13 +68,15 @@ const LoginForm = () => {
               {!showPassword ? <EyeIcon /> : <EyeSlashIcon />}
             </div>
           </div>
-          {errors.password && <p className="text-red-500 text-xs ps-5">{errors.password.message}</p>}
+          {errors.password && (
+            <p className="text-red-500 text-xs ps-5">{errors.password.message}</p>
+          )}
         </div>
-        {user?.error && <Error>{user.error}</Error>}
         <div className="flex justify-center">
           <Button textCenter={true}>Login</Button>
         </div>
       </form>
+      <Toaster visibleToasts={1} richColors={true} />
     </div>
   );
 };

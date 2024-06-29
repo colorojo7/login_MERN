@@ -1,15 +1,22 @@
 {
   "name": "login_mern",
-  "version": "1.0.0",
-  "description": "starter login template",
+  "version": "1.1.0",
+  "description": "Login with toast messages",
   "main": "index.js",
   "type": "module",
-
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Mauro",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "workspaces": [ "./client", "./server", "./shered"]
-
+  "workspaces": [
+    "./client",
+    "./server",
+    "./shered"
+  ],
+  "dependencies": {
+    "date-fns": "^3.6.0",
+    "uuid": "^10.0.0"
+  }
 }

@@ -9,25 +9,31 @@ import cookieParser from 'cookie-parser'
 import passport from "passport";
 
 import initializePassport from './config/passport.config.js'
+import { logger } from './middleware/logger.js';
+import { errorHandler } from './middleware/errorHandler.js';
 import './data/db.js'
+
+
 import envConfigObject from './config/dotenv.config.js'
+import corsOptions from './config/corsOptions.js';
 
 import usersRouter from './routes/userRouter.js'
+import authRouter from './routes/authRouter.js'
+import dashboardRouter from './routes/dashboardRouter.js'
 
 
 const app = express()
-const PUERTO = envConfigObject.port; 
+const PORT = envConfigObject.port || 4000; 
 const MODE =    envConfigObject.mode; 
+
+app.use(logger)
 
 /* CONFIGURATION */
 //dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-const corsOptions = {
-    origin: 'http://localhost:4000', // frontend URL
-    credentials: true, // Permitir enviar cookies y encabezados de autenticación HTTP
-};
+
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(passport.initialize());
@@ -43,12 +49,15 @@ initializePassport();
 
 app.get("/", (req, res)=>{
     res.send("Server working fine")
-})
+})  
 
 app.use("/", usersRouter)
+app.use("/", authRouter)
+app.use("/", dashboardRouter)
+dashboardRouter
 
+app.use(errorHandler)
 
-
-app.listen(PUERTO, ()=>{
-    console.log(`Escuchando en el puerto ${PUERTO} -- MODE:${MODE}`);
+app.listen(PORT, ()=>{
+    console.log(`Listening on port ${PORT} -- MODE:${MODE} http://localhost:8080/`);
 })

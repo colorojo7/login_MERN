@@ -1,13 +1,13 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useUserStore } from "../store/userStore";
 import routes from "../../../shared/routes";
+import useAuthStore from "../store/authStore";
 
 const PrivateRoute = ({  children }) => {
-  const isLogged = useUserStore(state => state.isLogged)
+  const isLoged = useAuthStore(state => state.isLoged)
 
   // if is not logged send the user to login
-  if (!isLogged) {
+  if (!isLoged) {
     return <Navigate to={routes.login} replace />;
   }
 

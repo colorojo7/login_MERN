@@ -8,11 +8,17 @@ dotenv.config({
 });
 
 const envConfigObject = {
-    mongo_url: process.env.MONGO_URL,
-    port: process.env.PORT,
-    secret_word:process.env.SECRET_WORD,
-    cookie_user:process.env.COOKIE_NAME_USER,
     mode:process.env.MODE,
+    port: process.env.PORT,
+    mongo_url: process.env.MONGO_URL,
+    
+    
+    accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
+    refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+
+    registrationCookie: process.env.REGISTRATION_COOKIE,
+    authCookie:process.env.AUTH_COOKIE,
+    
     google_app_password: process.env.GOOGLE_APP_PASSWORD,
 
 };

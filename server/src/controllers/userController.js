@@ -9,37 +9,42 @@ import {
   removePassword,
 } from "../utils/functions.js";
 import { transport } from "../config/nodemailer.js";
-import { createHash, data_VS_hashData} from "../utils/hashbcrypt.js";
+import { createHash, data_VS_hashData } from "../utils/hashbcrypt.js";
 import { res400, res500 } from "../utils/resposnses.js";
+import validator from "validator";
 
-const oneWeek = 1000 * 60 * 60 * 24 * 7;
 
-class userManager {
-  async registerEmail(req, res) {
-    //Registration step 1. Send a email with a PIN to proceed with the registerUser.
-    //Email and the hashed pin will be save in a cookie to veryfy in the Registration step 2
+const registerEmail = async (req, res) => {
+  //Registration step 1. Send a email with a PIN to proceed with the registerUser.
+  //Email and the hashed pin will be save in a cookie to veryfy in the Registration step 2
 
-    const { email } = req.body;
-    try {   
-      if (!email) {
-        return  res400(res,"Please enter a email" )
-      }
-      // verify if the email already exist in the DB
-      const exist = await UserModel.findOne({ email: email });
-      if (exist) {
-        return res400(res,"This e-mail is already registered" )
-      } 
+  const { email } = req.body;
+  try {
+    if (!email) {
+      return res400(res, "Please enter a email");
+    }
+    // verify if the email already exist in the DB
+    const exist = await UserModel.findOne({ email: email });
+    if (exist) {
+      return res400(res, "This e-mail is already registered");
+    }
+    if (!validator.isEmail(email)) {
+      return res400(res, "Email is not valid");
+    }
+    
+    //create a 6 digit PIN hash it
+    const randomPin = createRandomNumber(6).toString();
+    const hashRandomPin = createHash(randomPin);
+    
+    const token = await createToken({ email: email, pin: hashRandomPin });
+    console.log("token",hashRandomPin);
+    
 
-      //create a 6 digit PIN hash it
-      const randomPin = createRandomNumber(6).toString();
-      const hashRandomPin = createHash(randomPin);
-      const token = await createToken({ email: email, pin: hashRandomPin });
-
-      await transport.sendMail({
-        from: "LABOUR CONNECT <mauro.leonardi87@gmail.com>",
-        to: email,
-        subject: "Verify your email",
-        html: `
+    await transport.sendMail({
+      from: "LABOUR CONNECT <mauro.leonardi87@gmail.com>",
+      to: email,
+      subject: "Verify your email",
+      html: `
            <div style="font-family: Arial, sans-serif; color: #34495e; line-height: 1.5;">
             <div style="width: 100%; display: flex; justify-content: center;">
                 <div style="display: flex; align-items: flex-end; height: 80px; width: 80%; background-color: #ff7701; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
@@ -98,137 +103,76 @@ class userManager {
             </div>
         </div>
             `,
-      });
+    });
 
-      res
-        .status(200)
-        .cookie(envConfigObject.cookie_user, token, {
-          maxAge: 1000 * 60 * 60 * 2,
-          httpOnly: true,
-        })
-        .json({
-          ok: true,
-          
-          message: `e-mail sended successfully`,
-          doc:{email:email}
-        });
-    } catch (error) {
-      res.status(500).json({ error: "Somthing went wrong. Please try again" });
-    }
-  }
-
-  async registerUser(req, res) {
-    //Registration step 2. The user will be ask for the PIN and email plus Password and rest of the data required.
-    const {pin, email,  password, name, DOB } = req.body;
-    console.log(pin, email,  password, name, DOB );
-
-    try {
-      //get the email and hashed pin out of the cookie
-      console.log("entrando al try");
-      const registerToken = req.cookies[envConfigObject.cookie_user];
-      console.log("despues de registerToken");
-      const tokenData = jwt.verify(registerToken, envConfigObject.secret_word); 
-      console.log("despues de tokenData");
-      //verify if pin register is the same as the sended to the email
-      const validPin = data_VS_hashData(pin, tokenData.pin)
-      console.log("despues de validPin", validPin);
-      if(!validPin){
-        console.log("dentro del if validPin");
-        return res400(res,"Icorrect PIN")
-        //res.status(400).json({ error: "Incorrect PIN"});
-      }
-
-      if(email !== tokenData.email){
-        return res400(res,"Make sure to use the registered email")
-        //res.status(400).json({ error: "Make sure to use the registered email"});
-      }
-      console.log("Antes del UserModel.register");
-      const user = await UserModel.register(email, password, name, DOB);
-      console.log("user",user);
-      if(user.error){
-        console.log("dentro de user.error");
-        return res400(res, user.error)
-      }
-      const userData = removePassword(user._doc)
-      const token = await createToken(userData);
-      const doc = {pin, email, name, DOB }
-      res
-        .status(200)
-        .cookie(envConfigObject.cookie_user, token, {maxAge:oneWeek, httpOnly:true} )
-        .json({
-          ok: true,
-          message:"User created successfully",
-          doc: doc,
-        })
-    } catch (error) {
-      return res500(res,error,"Somthing went wrong. Please try again")
-      //res.status(500).json( { error: "Somthing went wrong. Please try again" } );
-    }
-  }
-
-  async loginUser(req, res) {
-    //Login. Using the login method of the UserModel,
-    //if is all OK we remove the password from the user objet create a token with the rest of the userData and save it in a cookie.
-    //it route return the userData.
-    const { email, password } = req.body;
-
-    try {
-      const user = await UserModel.login(email, password);
-      const userData = removePassword(user._doc);
-      const token = await createToken(userData);
-
-      res
-        .status(200)
-        .cookie(envConfigObject.cookie_user, token, {
-          maxAge: oneWeek,
-          httpOnly: true,
-        })
-        .json({
-          ok: true,
-          
-          userData,
-        });
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  }
-
-  async virify_token(req, res) {
-    // Function to be use at the top of the front end to verify if there is valid cookie and if it is sign the user.
-    //it route return the userData.
-    try {
-      const token = req.cookies[envConfigObject.cookie_user];
-      const tokenData = jwt.verify(token, envConfigObject.secret_word);
-      if(!tokenData._id){
-        return 
-      }
-      const uid = tokenData._id;
-      const user = await UserModel.findById(uid);
-      const userData = removePassword(user._doc);
-
-      res.status(200).json({
+    res
+      .status(200)
+      .cookie(envConfigObject.registrationCookie, token, {
+        maxAge: 1000 * 60 * 60 * 2,
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+      })
+      .json({
         ok: true,
-        userData,
+        message: `PIN sended to your e-mail`,
+        doc: { email: email },
       });
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
+  } catch (error) {
+    res.status(500).json({ error: "Somthing went wrong. Please try again" });
   }
+};
 
-  async logout(req, res) {
-    try {
-      const cookie = await req.cookies[envConfigObject.cookie_user];
-      if (cookie) {
-        res
-          .clearCookie("shiftTrakerCookie", { httpOnly: true, sameSite: "lax" })
-          .json({ ok: true, message: "loged Out succesfully" });
-      } else {
-        throw Error("we couldnt find the cokie to delete");
-      }
-    } catch (error) {
-      throw Error("somthing fail when deleting the cookie");
+const registerUser = async (req, res) => {
+  //Registration step 2. The user will be ask for the PIN and email plus Password and rest of the data required.
+  const { pin, email, password, name, DOB } = req.body;
+  console.log(pin, email, password, name, DOB);
+
+  try {
+    //get the email and hashed pin out of the cookie
+    const registerToken = req.cookies[envConfigObject.registrationCookie];
+    const tokenData = jwt.verify(registerToken, envConfigObject.accessTokenSecret);
+    //verify if pin register is the same as the sended to the email
+    const validPin = data_VS_hashData(pin, tokenData.pin);
+    if (!validPin) {
+      return res400(res, "PIN Incorrect");
+      //res.status(400).json({ error: "Incorrect PIN"});
     }
-  }
-}
 
-export const userController = new userManager();
+    if (email !== tokenData.email) {
+      return res400(res, "Use the registered email");
+      //res.status(400).json({ error: "Make sure to use the registered email"});
+    }
+    const user = await UserModel.register(email, password, name, DOB);
+    if (user.error) {
+      return res400(res, user.error);
+    }
+    const userData = removePassword(user._doc);
+    res
+      .status(200)
+      .clearCookie(envConfigObject.registrationCookie,{
+        maxAge: 1000 * 60 * 60 * 2,
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+      })
+      // .cookie(envConfigObject.cookie_user, token, {
+      //   maxAge: oneWeek,
+      //   httpOnly: true,
+      //   secure: true,
+      //   sameSite: "None",
+      // })
+      .json({
+        ok: true,
+        message: "User created successfully",
+        doc: userData,
+      });
+  } catch (error) {
+    return res500(res, error, "Somthing went wrong. Please try again");
+    //res.status(500).json( { error: "Somthing went wrong. Please try again" } );
+  }
+};
+
+const userController = { registerEmail, registerUser };
+
+export default userController;

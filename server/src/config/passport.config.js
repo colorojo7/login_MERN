@@ -13,8 +13,8 @@ const initializePassport = () => {
     "jwt",
     new jwtStrategy(
       {
-        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
-        secretOrKey: envConfigObject.secret_word,
+        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractorAuth,cookieExtractorReg]),
+        secretOrKey: envConfigObject.accessTokenSecret,
       },
       async (jwt_payload, done) => {
         try {
@@ -27,11 +27,18 @@ const initializePassport = () => {
   );
 };
 
-// create our cookieExtractor function
-const cookieExtractor = (req) => {
+// create our cookieExtractors function
+const cookieExtractorAuth = (req) => {
   let token = null;
   if (req && req.cookies) {
-    token = req.cookies[envConfigObject.cookie_user];
+    token = req.cookies[envConfigObject.authCookie];
+  }
+  return token;
+};
+const cookieExtractorReg = (req) => {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies[envConfigObject.registrationCookie];
   }
   return token;
 };
