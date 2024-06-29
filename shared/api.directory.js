@@ -2,7 +2,7 @@ const api = {
     auth:{
       login:"/api/auth/login",
       logout:"/api/auth/logout",
-      refresh_auth: "api/auth/refresh_auth"
+      refresh_auth: "/api/auth/refresh_auth"
     },
 
 
