@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Toaster, toast } from "sonner";
 
@@ -6,11 +6,16 @@ import useAuthStore from "../../store/authStore.js";
 
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import Button from "../Button";
+import SupportedBrowsers from "../SuppsortedBrowsers.jsx";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import routes from "../../../../shared/routes.js";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-
   const login = useAuthStore((state) => state.login);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || routes.dashboard.home
 
   const {
     register,
@@ -23,6 +28,7 @@ const LoginForm = () => {
           const res = await login(data.email, data.password);
           res.error &&toast.error(res.message);
           res?.ok && toast.success(res.message);
+          navigate(from, {replace:true})
     } catch (error) {
       toast.error(error.message);
     }
@@ -76,6 +82,7 @@ const LoginForm = () => {
           <Button textCenter={true}>Login</Button>
         </div>
       </form>
+      <SupportedBrowsers/>
       <Toaster visibleToasts={1} richColors={true} />
     </div>
   );

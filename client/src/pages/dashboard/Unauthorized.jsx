@@ -1,12 +1,12 @@
 import React from "react";
-import Button from "../components/Button";
-import { Link, useNavigate } from "react-router-dom";
-import routes from "../../../shared/routes";
+import Button from "../../components/Button";
+import {  useNavigate } from "react-router-dom";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
-const NotFoundPage = () => {
+const Unauthorized = () => {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
+
   return (
     <main className="flex items-center justify-center md:h-screen">
       <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
@@ -15,9 +15,11 @@ const NotFoundPage = () => {
         </div>
         <div className="flex flex-wrap h-36 w-full items-end rounded-lg bg-main-4 p-3 ">
           <div className="w-full text-white font-black text-3xl text-center ">
-            PAGE NOT FOUND
+            UNAUTHORIZED
           </div>
-          <div className="w-full text-white text-center ">Error 404</div>
+          <div className="w-full text-white text-center ">
+            This page is protected.
+          </div>
         </div>
         <Button type="main-outlined" onClick={goBack}>
           <p>Go Back</p>
@@ -27,4 +29,4 @@ const NotFoundPage = () => {
   );
 };
 
-export default NotFoundPage;
+export default Unauthorized;

@@ -36,9 +36,7 @@ const registerEmail = async (req, res) => {
     const randomPin = createRandomNumber(6).toString();
     const hashRandomPin = createHash(randomPin);
     
-    const token = await createToken({ email: email, pin: hashRandomPin });
-    console.log("token",hashRandomPin);
-    
+    const token = await createToken({ email: email, pin: hashRandomPin });    
 
     await transport.sendMail({
       from: "LABOUR CONNECT <mauro.leonardi87@gmail.com>",
@@ -125,8 +123,7 @@ const registerEmail = async (req, res) => {
 
 const registerUser = async (req, res) => {
   //Registration step 2. The user will be ask for the PIN and email plus Password and rest of the data required.
-  const { pin, email, password, name, DOB } = req.body;
-
+  const { pin, email, password, name, last_name , DOB } = req.body;
   try {
     //get the email and hashed pin out of the cookie
     const registerToken = req.cookies[envConfigObject.registrationCookie];
@@ -142,7 +139,7 @@ const registerUser = async (req, res) => {
       return res400(res, "Use the registered email");
       //res.status(400).json({ error: "Make sure to use the registered email"});
     }
-    const user = await UserModel.register(email, password, name, DOB);
+    const user = await UserModel.register(email, password, name, last_name, DOB);
     if (user.error) {
       return res400(res, user.error);
     }

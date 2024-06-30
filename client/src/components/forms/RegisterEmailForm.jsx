@@ -8,6 +8,7 @@ import routes from "../../../../shared/routes.js";
 
 import Button from "../Button";
 import Spinner from "../Spinner.jsx";
+import SupportedBrowsers from "../SuppsortedBrowsers.jsx";
 
 
 const RegisterEmailForm = () => {
@@ -53,10 +54,10 @@ const RegisterEmailForm = () => {
         <div>1- Register your email and recive a PIN</div>
         <div>2- Use the PIN to create your account</div>
         <div className="text-center font-bold">
-          IMPORTANT. Use the same browser
+          IMPORTANT. Use one of the supported browser
         </div>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-2">
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-2 mb-2">
         <div className="flex flex-col gap-3">
           <input
             id="email"
@@ -94,8 +95,9 @@ const RegisterEmailForm = () => {
               </Link>
           }
         </div>
-      </form>
+      </form >
       <Toaster visibleToasts={1} richColors={true} />
+      <SupportedBrowsers/>
     </div>
   );
 };

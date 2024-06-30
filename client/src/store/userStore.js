@@ -1,7 +1,6 @@
 import { create } from "zustand";
-import { fetchGET, fetchPOST } from "../utils/fetchCustom.js";
+import { fetchPOST } from "../utils/fetchCustom.js";
 import api from "../../../shared/api.directory.js";
-import useAuthStore from "./authStore.js";
 
 export const useUserStore = create((set, get) => {
   return {
@@ -10,8 +9,6 @@ export const useUserStore = create((set, get) => {
     registerUserResponse:null,
   
     
-    
-
     //** ACTIONS **//
     registerEmail: async (email) => {
       try {
@@ -33,14 +30,15 @@ export const useUserStore = create((set, get) => {
       }
     },
 
-    registerUser: async (pin, email, password, name, DOB) => {
+    registerUser: async (pin, email, password, name, last_name, DOB) => {
       try {
         const data = await fetchPOST(api.user.register.user , {
-          pin: pin,
-          email: email,
-          password: password,
-          name: name,
-          DOB: DOB,
+          pin,
+          email,
+          password,
+          name,
+          last_name,
+          DOB,
         });
         if(data.error){
           set({

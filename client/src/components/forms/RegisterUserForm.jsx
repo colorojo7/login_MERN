@@ -8,8 +8,6 @@ import { states } from "../../helpers/optionsArrays";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import Button from "../Button";
 import Label from "../Label";
-import Error from "../Error";
-import Success from "../Success";
 import { Link } from "react-router-dom";
 import routes from "../../../../shared/routes";
 
@@ -35,19 +33,14 @@ const RegisterUserForm = () => {
       data.email,
       data.password,
       data.name,
+      data.last_name,
       data.DOB
     );
-    console.log(res);
     res?.error && toast.error(res.message);
     res?.ok && toast.success(res.message);
   };
 
-  // useEffect(() => {
-  //   errors && toast.error("Complete all required fields")
-  //   paswordsError && toast.error(paswordsError)
-  //   registerUserResponse?.error && toast.error(registerUserResponse.message);
-  //   registerUserResponse?.ok && toast.success(registerUserResponse.message);
-  // }, [registerUserResponse, errors, paswordsError]);
+
 
   return (
     <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
@@ -84,7 +77,7 @@ const RegisterUserForm = () => {
            
           </div>
           <div>
-            <Label htmlFor="password" />
+            <Label text="password" htmlFor="password" />
             <div className="flex flex-row gap-3">
               <input
                 id="password"
@@ -119,7 +112,7 @@ const RegisterUserForm = () => {
           </div>
 
           <div>
-            <Label htmlFor="name" />
+            <Label text="Name" htmlFor="name" />
             <input
               id="name"
               name="name"
@@ -127,6 +120,20 @@ const RegisterUserForm = () => {
               type="text"
               className="input w-full"
               {...register("name", {
+                required: "Required",
+              })}
+            />
+          </div>
+
+          <div>
+            <Label text="Lastname" htmlFor="last_name" />
+            <input
+              id="last_name"
+              name="last_name"
+              placeholder="last_name"
+              type="text"
+              className="input w-full"
+              {...register("last_name", {
                 required: "Required",
               })}
             />

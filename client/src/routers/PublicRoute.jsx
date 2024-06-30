@@ -1,18 +1,14 @@
-import React from 'react'
-import { Navigate } from 'react-router-dom'
-import routes from '../../../shared/routes';
-import useAuthStore from '../store/authStore';
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import routes from "../../../shared/routes";
+import useAuthStore from "../store/authStore";
 
 const PublicRoute = ({ children }) => {
-  const isLoged = useAuthStore(state => state.isLoged)
-  console.log(isLoged);
-  //if there is a Logged user navigate to the dashboard
-  if (isLoged) {
-    return <Navigate to={routes.dashboard.home} replace />
-  }
+  const isLoged = useAuthStore((state) => state.isLoged);
 
-  // if there is no Logged user will render the child component
-  return children
-}
+  return !isLoged 
+    ? <Outlet /> 
+    : <Navigate to={routes.dashboard.home} />;
+};
 
-export default PublicRoute
+export default PublicRoute;

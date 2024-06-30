@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { createHash, isValidPassword } from "../utils/hashbcrypt.js";
 import validator from "validator";
+import { ROLES } from "../../../shared/roles.js";
+
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -17,19 +19,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // last_name:{
-  //   type: String,
-  //   required: true
-  // },
+  last_name:{
+    type: String,
+    required: true
+  },
   DOB: {
     type: Date,
-    required: true,
+    required: true, 
   },
-  // role:{
-  //   type: String,
-  //   required: true,
-  //   default: "worker"
-  // },
+  role:{
+    type: Array,
+    required:true,
+    default: [ROLES.worker]
+  },
   // adress:{
   //   type: Object,
   //   reqired: true
@@ -38,12 +40,11 @@ const userSchema = new mongoose.Schema({
 
 //** STATIC METHODS **//
 
-//-->  Register
-userSchema.statics.register = async function (email, password, name, DOB) {
+userSchema.statics.register = async function (email, password, name,last_name, DOB) {
   //* VALIDATIONS *//
 
   // required data are not empty values
-  if (!email || !password || !name || !DOB) {
+  if (!email || !password || !name || !last_name || !DOB) {
     return { error: "All fields are required" };
   }
 
@@ -83,11 +84,15 @@ userSchema.statics.register = async function (email, password, name, DOB) {
   //* HASH PASSWORD  *//
   const hash = createHash(password);
   //* CREATE USER*//
-  const user = await this.create({ password: hash, email, name, DOB });
+  const user = await this.create({ 
+    password: hash, 
+    email, 
+    name, 
+    last_name , 
+    DOB });
   return user;
 };
 
-//-->  Login
 userSchema.statics.login = async function (email, password) {
   //* VALIDATIONS *//
   // required data are not empty vlues
