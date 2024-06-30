@@ -1,10 +1,10 @@
-import routes from "../../../shared/routes.js";
+import api from "../../../shared/api.directory.js";
 import { API_HOST } from "../../config.js";
 
 
 export const fetchPOST = async (endpoint, bodyObj) => {
   try {
-    const response = await fetch(`${ routes.host }${endpoint}`, {
+    const response = await fetch(`${ api.host }${endpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,7 +21,7 @@ export const fetchPOST = async (endpoint, bodyObj) => {
     
 export const fetchGET = async (endpoint) => {
   try {
-    const response = await fetch(`${ API_HOST }${endpoint}`, {
+    const response = await fetch(`${ api.host }${endpoint}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
