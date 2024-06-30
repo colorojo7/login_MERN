@@ -1,5 +1,4 @@
 import api from "../../../shared/api.directory.js";
-import { API_HOST } from "../../config.js";
 
 
 export const fetchPOST = async (endpoint, bodyObj) => {
