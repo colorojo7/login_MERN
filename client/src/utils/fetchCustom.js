@@ -1,9 +1,10 @@
+import routes from "../../../shared/routes.js";
 import { API_HOST } from "../../config.js";
 
 
 export const fetchPOST = async (endpoint, bodyObj) => {
   try {
-    const response = await fetch(`${ API_HOST }${endpoint}`, {
+    const response = await fetch(`${ routes.host }${endpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

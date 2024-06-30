@@ -1,5 +1,6 @@
 
  const routes = {
+
     landing: "/",
     login: "/login",
     register: {

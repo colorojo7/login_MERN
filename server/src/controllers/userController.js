@@ -126,7 +126,6 @@ const registerEmail = async (req, res) => {
 const registerUser = async (req, res) => {
   //Registration step 2. The user will be ask for the PIN and email plus Password and rest of the data required.
   const { pin, email, password, name, DOB } = req.body;
-  console.log(pin, email, password, name, DOB);
 
   try {
     //get the email and hashed pin out of the cookie
@@ -151,17 +150,11 @@ const registerUser = async (req, res) => {
     res
       .status(200)
       .clearCookie(envConfigObject.registrationCookie,{
-        maxAge: 1000 * 60 * 60 * 2,
         httpOnly: true,
         secure: true,
         sameSite: "None",
       })
-      // .cookie(envConfigObject.cookie_user, token, {
-      //   maxAge: oneWeek,
-      //   httpOnly: true,
-      //   secure: true,
-      //   sameSite: "None",
-      // })
+
       .json({
         ok: true,
         message: "User created successfully",

@@ -10,12 +10,11 @@ const login = async (req, res) => {
   //if is all OK we remove the password from the user objet create a token with the rest of the userData and save it in a cookie.
   const { email, password } = req.body;
   const user = await UserModel.login(email, password);
-  console.log(user);
   if (user.error) {
     return res400(res, user.error);
   }
   const userData = removePassword(user._doc);
-  const token = await createToken(userData);
+  const token = await createToken(userData);      
 
   res
     .status(200)
@@ -53,7 +52,6 @@ const refresh_auth = async (req, res) => {
 
 const logout = async (req, res) => {
   const cookie = await req.cookies[envConfigObject.authCookie];
-  console.log(cookie);
   if (cookie) {
     res
       .status(200)

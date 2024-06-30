@@ -9,7 +9,6 @@ import cookieParser from 'cookie-parser'
 import passport from "passport";
 
 import initializePassport from './config/passport.config.js'
-import { logger } from './middleware/logger.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import './data/db.js'
 
@@ -26,7 +25,8 @@ const app = express()
 const PORT = envConfigObject.port || 4000; 
 const MODE =    envConfigObject.mode; 
 
-app.use(logger)
+//import { logger } from './middleware/logger.js';
+//app.use(logger)
 
 /* CONFIGURATION */
 //dotenv.config();
