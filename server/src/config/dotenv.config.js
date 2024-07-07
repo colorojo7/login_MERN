@@ -4,7 +4,7 @@ import program from "../utils/comander.js";
 const { mode } = program.opts(); 
 
 dotenv.config({
-    path: mode ==="production" ? "./.env.production" : "./.env.develop"
+    path: mode ==="production" ? "./.env.production" : "./.env.development"
 });
 
 const envConfigObject = {

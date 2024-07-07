@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/app.js --mode develop",
+    "dev": "nodemon src/app.js --mode development",
     "start": "node src/app.js --mode production"
   },
   "keywords": [],

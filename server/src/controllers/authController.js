@@ -5,6 +5,12 @@ import { createToken, removePassword } from "../utils/tools.js";
 import UserModel from "../models/user.model.js";
 import { res400 } from "../utils/resposnses.js";
 
+const authCookie = {
+  httpOnly: true,
+  secure: envConfigObject.mode === 'production' ? true: false,
+  sameSite: "Strict",
+}
+
 const login = async (req, res) => {
   //Login. Using the login method of the UserModel,
   //if is all OK we remove the password from the user objet create a token with the rest of the userData and save it in a cookie.
@@ -20,9 +26,7 @@ const login = async (req, res) => {
     .status(200)
     .cookie(envConfigObject.authCookie, token, {
       maxAge: 1000 * 60 * 60 * 24 * 7, //one week
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      ...authCookie
     })
     .json({
       ok: true,
@@ -56,9 +60,7 @@ const logout = async (req, res) => {
     res
       .status(200)
       .clearCookie(envConfigObject.authCookie, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
+        ...authCookie
       })
       .json({ ok: true, message: "loged Out succesfully" });
   } else {

@@ -4,6 +4,8 @@
 
 
 import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import cors from "cors";
 import cookieParser from 'cookie-parser'
 import passport from "passport";
@@ -22,6 +24,9 @@ import dashboardRouter from './routes/dashboardRouter.js'
 
 
 const app = express()
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const PORT = envConfigObject.port || 4000; 
 const MODE =    envConfigObject.mode; 
 
@@ -34,7 +39,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 
-app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(passport.initialize());
 initializePassport();
@@ -47,14 +52,20 @@ initializePassport();
 /* ROUTES */
 
 
-app.get("/", (req, res)=>{
-    res.send("Server working fine")
-})  
+// app.get("/", (req, res)=>{
+//     res.send("Server working fine")
+// }) 
+
+//app.use(express.static('dist'))
 
 app.use("/", usersRouter)
 app.use("/", authRouter)
 app.use("/", dashboardRouter)
-dashboardRouter
+
+app.use(express.static(path.join(__dirname, 'dist')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  });
 
 app.use(errorHandler)
 
