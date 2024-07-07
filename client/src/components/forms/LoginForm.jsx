@@ -26,9 +26,9 @@ const LoginForm = () => {
   const handleLogin = async (data) => {
     try {
           const res = await login(data.email, data.password);
-          res.error &&toast.error(res.message);
+          res.error && toast.error(res.message);
           res?.ok && toast.success(res.message);
-          navigate(from, {replace:true})
+          res?.ok && navigate(from, {replace:true})
     } catch (error) {
       toast.error(error.message);
     }
