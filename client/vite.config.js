@@ -6,7 +6,7 @@ import api from '../shared/api.directory'
 export default defineConfig({
   server:{
     proxy:{
-      '/api': api.host
+      '/api': 'http://localhost:8080'
     }
   },
   plugins: [react()],

@@ -8,7 +8,6 @@ import routes from "../../../../shared/routes.js";
 
 import Button from "../Button";
 import Spinner from "../Spinner.jsx";
-import SupportedBrowsers from "../SuppsortedBrowsers.jsx";
 
 
 const RegisterEmailForm = () => {
@@ -97,7 +96,6 @@ const RegisterEmailForm = () => {
         </div>
       </form >
       <Toaster visibleToasts={1} richColors={true} />
-      <SupportedBrowsers/>
     </div>
   );
 };

@@ -1,7 +1,4 @@
 const api = {
-    //host:"",
-    //host:"http://localhost:8080",
-    host:"https://server-login-mern.onrender.com",
 
     auth:{
       login:"/api/auth/login",

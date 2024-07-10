@@ -6,7 +6,6 @@ import useAuthStore from "../../store/authStore.js";
 
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import Button from "../Button";
-import SupportedBrowsers from "../SuppsortedBrowsers.jsx";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import routes from "../../../../shared/routes.js";
 
@@ -82,7 +81,6 @@ const LoginForm = () => {
           <Button textCenter={true}>Login</Button>
         </div>
       </form>
-      <SupportedBrowsers/>
       <Toaster visibleToasts={1} richColors={true} />
     </div>
   );

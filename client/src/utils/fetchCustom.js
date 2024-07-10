@@ -1,9 +1,7 @@
-import api from "../../../shared/api.directory.js";
-
 
 export const fetchPOST = async (endpoint, bodyObj) => {
   try {
-    const response = await fetch(`${ api.host }${endpoint}`, {
+    const response = await fetch(`${endpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -20,7 +18,7 @@ export const fetchPOST = async (endpoint, bodyObj) => {
     
 export const fetchGET = async (endpoint) => {
   try {
-    const response = await fetch(`${ api.host }${endpoint}`, {
+    const response = await fetch(`${endpoint}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
