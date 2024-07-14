@@ -14,7 +14,7 @@ const LoginForm = () => {
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || routes.dashboard.home
+  const from = location.state?.from?.pathname || routes.dashboard.home;
 
   const {
     register,
@@ -24,15 +24,14 @@ const LoginForm = () => {
 
   const handleLogin = async (data) => {
     try {
-          const res = await login(data.email, data.password);
-          res.error && toast.error(res.message);
-          res?.ok && toast.success(res.message);
-          res?.ok && navigate(from, {replace:true})
+      const res = await login(data.email, data.password);
+      res.error && toast.error(res.message);
+      res?.ok && toast.success(res.message);
+      res?.ok && navigate(from, { replace: true });
     } catch (error) {
       toast.error(error.message);
     }
   };
-
 
   return (
     <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
@@ -50,7 +49,7 @@ const LoginForm = () => {
               required: "Required",
             })}
           />
-           {errors.email && (
+          {errors.email && (
             <p className="text-red-500 text-xs ps-5">{errors.email.message}</p>
           )}
 
@@ -65,7 +64,7 @@ const LoginForm = () => {
                 required: "Required",
               })}
             />
-            
+
             <div
               onClick={() => setShowPassword(!showPassword)}
               className="text-blue-500 py-2 w-6"
@@ -74,7 +73,9 @@ const LoginForm = () => {
             </div>
           </div>
           {errors.password && (
-            <p className="text-red-500 text-xs ps-5">{errors.password.message}</p>
+            <p className="text-red-500 text-xs ps-5">
+              {errors.password.message}
+            </p>
           )}
         </div>
         <div className="flex justify-center">

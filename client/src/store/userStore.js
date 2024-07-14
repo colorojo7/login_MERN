@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { fetchPOST } from "../utils/fetchCustom.js";
 import api from "../../../shared/api.directory.js";
+import { toast } from "sonner";
 
 export const useUserStore = create((set, get) => {
   return {
@@ -26,7 +27,7 @@ export const useUserStore = create((set, get) => {
            });
         return data
       } catch (error) {
-        console.log("Error at registerEmail", error);
+        toast.error("UPS. Somthing went wrong when registering your email. Try agin")
       }
     },
 
@@ -54,7 +55,7 @@ export const useUserStore = create((set, get) => {
         return data
       
       } catch (error) {
-        console.log("Error at registerUser", error);
+        toast.error("UPS. Somthing went wrong when registering your email. Try agin")
       }
     },
 

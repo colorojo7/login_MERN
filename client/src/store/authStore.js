@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { fetchGET, fetchPOST } from "../utils/fetchCustom.js";
 import api from "../../../shared/api.directory.js";
+import { toast } from "sonner";
 
 const useAuthStore = create((set, get) => {
   return {
@@ -22,7 +23,6 @@ const useAuthStore = create((set, get) => {
           
         }
         if (data.ok) {
-          console.log(data);
           set({
             isLoged: true,
             user: data.userData,
@@ -30,7 +30,7 @@ const useAuthStore = create((set, get) => {
         } 
         return data
       } catch (error) {
-        console.log(error);
+        toast.error("UPS. Somthing went wrong when tring to login. Try again")
       }
     },
 
@@ -38,7 +38,6 @@ const useAuthStore = create((set, get) => {
       try {
        
         const data = await fetchGET(api.auth.refresh_auth);
-        console.log("recibiendo data en refreshauth", data);
         if (data.ok) {
           const userData = await data.userData;
           set({
@@ -46,23 +45,21 @@ const useAuthStore = create((set, get) => {
             user: userData,
           });
         } else if (data.status === 401) {
-          console.log("UPS. No valid cookie or token expired");
           set({
             isLoged: false,
             user: null,
           });
         } else {
-          console.error("Verification failed:", data.message);
+          toast.error("Verification failed:", data.message);
         }
       } catch (error) {
-        console.log("UPS Somthing went wrong when running 'refresh_auth'");
+        toast.error("UPS. Somthing went wrong when refreshing your login.")
       }
     },
 
     logout: async () => {
       try {
         const data = await fetchGET(api.auth.logout);
-        console.log("data", data);  
         if (data.ok) {
           set({
             isLoged: false,
@@ -70,6 +67,7 @@ const useAuthStore = create((set, get) => {
           });
         }
       } catch (error) {
+        toast.error("Somthing went wrong when running triyng to 'logout'")
         throw Error("Somthing went wrong when running triyng to 'logout'");
       }
     },

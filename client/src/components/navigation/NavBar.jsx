@@ -7,9 +7,7 @@ const NavBar = () => {
   const logout = useAuthStore(state=>state.logout)
   const user = useAuthStore(state=>state.user)
 
-  console.log("user en nav",user);
   const handleLogOut = () => {
-    console.log("handleLogOut");
     logout()
   };
 

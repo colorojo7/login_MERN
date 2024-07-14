@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 
 export const fetchPOST = async (endpoint, bodyObj) => {
   try {
@@ -12,10 +13,10 @@ export const fetchPOST = async (endpoint, bodyObj) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("UPS, fetchPOST got an error =>",error);
-  } 
+    toast.error("UPS. Somthing went wrong. Try again");
+  }
 };
-    
+
 export const fetchGET = async (endpoint) => {
   try {
     const response = await fetch(`${endpoint}`, {
@@ -35,6 +36,6 @@ export const fetchGET = async (endpoint) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("UPS, fetchGET got an error =>",error);
+    toast.error("UPS. Somthing went wrong. Try again");
   }
 };

@@ -9,7 +9,6 @@ import routes from "../../../../shared/routes.js";
 import Button from "../Button";
 import Spinner from "../Spinner.jsx";
 
-
 const RegisterEmailForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,14 +20,16 @@ const RegisterEmailForm = () => {
 
   //const [email, setEmail] = useState("");
   const registerEmail = useUserStore((state) => state.registerEmail);
-  const registerEmailResponse = useUserStore( (state) => state.registerEmailResponse );
-  const Clear_registerEmailResponse = useUserStore( (state) => state.Clear_registerEmailResponse );
-
-  
+  const registerEmailResponse = useUserStore(
+    (state) => state.registerEmailResponse
+  );
+  const Clear_registerEmailResponse = useUserStore(
+    (state) => state.Clear_registerEmailResponse
+  );
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    try { 
+    try {
       const res = await registerEmail(data.email);
       res?.error && toast.error(res.message);
       res?.ok && toast.success(res.message);
@@ -38,10 +39,9 @@ const RegisterEmailForm = () => {
     }
   };
 
-  useEffect(()=>{
-    return Clear_registerEmailResponse()
-  },[])
-
+  useEffect(() => {
+    return Clear_registerEmailResponse();
+  }, []);
 
   return (
     <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
@@ -73,28 +73,24 @@ const RegisterEmailForm = () => {
           )}
         </div>
 
-
         <div className="flex justify-center">
           <Button
             textCenter={true}
-            className={`${isLoading && "cursor-not-allowed disabled"} ${registerEmailResponse?.ok && "hidden"}`}
+            className={`${isLoading && "cursor-not-allowed disabled"} ${
+              registerEmailResponse?.ok && "hidden"
+            }`}
             disabled={isLoading}
           >
             {isLoading ? <Spinner /> : "Register e-mail"}
           </Button>
 
-
-          {registerEmailResponse?.ok&&
-              <Link to={routes.register.user}>
-                <Button
-                  textCenter={true}
-                >
-                    Complete registration
-                </Button>
-              </Link>
-          }
+          {registerEmailResponse?.ok && (
+            <Link to={routes.register.user}>
+              <Button textCenter={true}>Complete registration</Button>
+            </Link>
+          )}
         </div>
-      </form >
+      </form>
       <Toaster visibleToasts={1} richColors={true} />
     </div>
   );

@@ -132,12 +132,10 @@ const registerUser = async (req, res) => {
     const validPin = data_VS_hashData(pin, tokenData.pin);
     if (!validPin) {
       return res400(res, "PIN Incorrect");
-      //res.status(400).json({ error: "Incorrect PIN"});
     }
 
     if (email !== tokenData.email) {
       return res400(res, "Use the registered email");
-      //res.status(400).json({ error: "Make sure to use the registered email"});
     }
     const user = await UserModel.register(email, password, name, last_name, DOB);
     if (user.error) {
@@ -159,7 +157,6 @@ const registerUser = async (req, res) => {
       });
   } catch (error) {
     return res500(res, error, "Somthing went wrong. Please try again");
-    //res.status(500).json( { error: "Somthing went wrong. Please try again" } );
   }
 };
 

@@ -10,7 +10,6 @@ export const errorHandler = (err, req, res, next)=>{
     //     `,
     //     'errorLog.log'
     // )
-    console.log(err.stack);
 
     const status = res.statusCode 
         ?   res.statusCode 

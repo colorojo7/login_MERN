@@ -70,5 +70,5 @@ app.get('*', (req, res) => {
 app.use(errorHandler)
 
 app.listen(PORT, ()=>{
-    console.log(`Listening on port ${PORT} -- MODE:${MODE} http://localhost:8080/`);
+    console.log(`Listening on port ${PORT} -- MODE:${MODE}`);
 })

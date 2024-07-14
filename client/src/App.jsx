@@ -5,30 +5,26 @@ import useAuthStore from "./store/authStore";
 import Spinner from "./components/Spinner";
 
 function App() {
-
   const refresh_auth = useAuthStore((state) => state.refresh_auth);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
-  
-  const veryfyUser = async ()=>{
+  const veryfyUser = async () => {
     await refresh_auth();
-    setIsLoading(false)
-  }
-  useEffect(()=>{
-    veryfyUser()
-  },[])
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    veryfyUser();
+  }, []);
 
-
-  
   return (
     <>
-      {isLoading? 
-      <div className="h-full flex justify-center items-center">
-        <Spinner/>
-      </div>
-      :
-      <AppRouter />
-      }
+      {isLoading ? (
+        <div className="h-screen flex flex-col justify-center">
+          <Spinner />
+        </div>
+      ) : (
+        <AppRouter />
+      )}
     </>
   );
 }
