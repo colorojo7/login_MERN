@@ -1,4 +1,4 @@
-let mode = "DEV"
+let mode = "production"
 
 
 
