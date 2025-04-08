@@ -1,0 +1,1 @@
+export const logo_platform_URL = "https://vitejs.dev/logo-with-shadow.png"

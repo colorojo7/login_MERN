@@ -7,6 +7,7 @@
       email: "/register/email",
       user:"/register/user"
     },
+    reset_password: "/reset_password",
     dashboard: {
       home: "/dashboard",
       settings: "/dashboard/settings",

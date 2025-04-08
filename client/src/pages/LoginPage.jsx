@@ -3,22 +3,15 @@ import FrameForm from "../components/layouts/FrameForm";
 import LoginForm from "../components/forms/LoginForm";
 import { Link } from "react-router-dom";
 import routes from "../../../shared/routes";
+import logo_platform from '../../../shared/images/logos/logo_platform.svg'
+
 
 const LoginPage = () => {
   return (
-    <FrameForm title="LABOUR CONNECT">
+    <FrameForm  image={logo_platform}>
       
       <LoginForm />
-      <p>
-        Don't have an account?
-        <Link
-          to={routes.register.email}
-          className="underline text-center text-blue-600"
-        >
-          {" "}
-          Register
-        </Link>
-      </p>
+      
     </FrameForm>
   );
 };

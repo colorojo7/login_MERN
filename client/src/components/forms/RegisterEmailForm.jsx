@@ -35,6 +35,7 @@ const RegisterEmailForm = () => {
       res?.ok && toast.success(res.message);
       setIsLoading(false);
     } catch (error) {
+      console.log(error);
       setIsLoading(false);
     }
   };
@@ -81,7 +82,7 @@ const RegisterEmailForm = () => {
             }`}
             disabled={isLoading}
           >
-            {isLoading ? <Spinner /> : "Register e-mail"}
+            {isLoading ? <Spinner className="w-9 h-9 "/> : "Register e-mail"}
           </Button>
 
           {registerEmailResponse?.ok && (

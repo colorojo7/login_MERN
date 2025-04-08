@@ -12,7 +12,6 @@ import LoginPage from "../pages/LoginPage";
 
 //** PRIVATE ROUTES **//
 import AuthRoute from "./AuthRoute";
-import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../components/layouts/DashboardLayout";
 import HomePage from "../pages/dashboard/HomePage";
 import AccountPage from "../pages/dashboard/AccountPage";
@@ -28,6 +27,7 @@ import AdminPage from "../pages/admin/AdminPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import { ROLES } from "../../../shared/roles";
 import Unauthorized from "../pages/dashboard/Unauthorized";
+import PasswordResetPage from "../pages/PasswordResetPage";
 
 const AppRouter = () => {
   return (
@@ -41,6 +41,8 @@ const AppRouter = () => {
           <Route path={routes.register.email} element={<RegisterEmailPage />} />
           <Route path={routes.register.user} element={<RegisterUserPage />} />
           <Route path={routes.login} element={<LoginPage />} />
+          <Route path={routes.reset_password} element={<PasswordResetPage />} />
+          
         </Route>
 
         {/* -----PRIVATES ROUTES------- */}

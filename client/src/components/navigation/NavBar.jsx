@@ -2,6 +2,7 @@ import React from "react";
 import NavLinks from "./NavLinks";
 import {PowerIcon} from "@heroicons/react/24/outline"
 import useAuthStore from "../../store/authStore";
+import logo_platform from '../../../../shared/images/logos/logo_platform.svg'
 
 const NavBar = () => {
   const logout = useAuthStore(state=>state.logout)
@@ -9,12 +10,13 @@ const NavBar = () => {
 
   const handleLogOut = () => {
     logout()
+    window.location.reload();
   };
 
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
       <div className="mb-2 flex flex-col gap-2 h-20 items-starts justify-center rounded-md bg-main-5 p-3 md:h-40">
-          <img className="w-1/3  md:w-full rounded-md md:flex" src="https://www.labourconnect.com.au/wp-content/uploads/2024/01/Screen-Shot-2024-04-20-at-9.57.24-pm.png" alt="Labour Connect" /> 
+          <img className="w-1/3 h-2/3  md:w-full rounded-md md:flex" src={logo_platform} alt="Bussines Logo" /> 
 
         <div className="hidden md:flex text-white font-black">
           {user? user.name: "USER NAME HERE"}

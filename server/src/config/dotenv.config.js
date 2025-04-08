@@ -15,6 +15,7 @@ const envConfigObject = {
     
     accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
     refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+    passwordRecoverTokenSecret:process.env.PASSWORD_RECOVER_TOKEN_SECRET,
 
     registrationCookie: process.env.REGISTRATION_COOKIE,
     authCookie:process.env.AUTH_COOKIE,

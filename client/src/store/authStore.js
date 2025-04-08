@@ -6,8 +6,10 @@ import { toast } from "sonner";
 const useAuthStore = create((set, get) => {
   return {
     isLoged: false,
-    access_token: null,
     user: null,
+    access_token: null,
+    
+   
 
     //** ACTIONS **//
     login: async (email, password) => {

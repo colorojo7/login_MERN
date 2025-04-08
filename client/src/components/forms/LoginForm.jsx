@@ -72,6 +72,15 @@ const LoginForm = () => {
               {!showPassword ? <EyeIcon /> : <EyeSlashIcon />}
             </div>
           </div>
+
+          <div className="flex justify-end">
+            <Link
+              to={routes.reset_password}
+              className="text-blue-500 text-sm text-center"
+            >
+              Forgot Password?
+            </Link>
+          </div>
           {errors.password && (
             <p className="text-red-500 text-xs ps-5">
               {errors.password.message}
@@ -83,6 +92,19 @@ const LoginForm = () => {
         </div>
       </form>
       <Toaster visibleToasts={1} richColors={true} />
+      <div className="flex justify-center mt-4">
+        <p>
+          Don't have an account?
+          <Link
+            to={routes.register.email}
+            className="underline text-center text-blue-600"
+          >
+            {" "}
+            Register
+          </Link>
+        </p>
+
+      </div>
     </div>
   );
 };

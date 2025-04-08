@@ -11,7 +11,7 @@ const Button = ({ type = "main", className, children, onClick, textCenter, ...pr
     return (
       <button
         onClick={onClick}
-        className={`  bg-orange-500 hover:bg-orange-600 ${generalButonStyle} ${filledButtons} `}
+        className={`  bg-orange-500 hover:bg-orange-600 ${generalButonStyle} ${filledButtons} ${className} `}
         {...props}
       >
         <div className={textCenter&&"w-full text-center"}>{children}</div>

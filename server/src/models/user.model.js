@@ -15,6 +15,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  resetPasswordToken: {
+    type: String,
+    required: false,
+  },
+  resetPasswordExpires: {
+    type: String,
+    required: false,
+  },
   name: {
     type: String,
     required: true,
@@ -117,6 +125,32 @@ userSchema.statics.login = async function (email, password) {
 
   return user;
 };
+
+userSchema.statics.checkPasswordStrength_andHash = async function (password){
+
+  const minStrenght = 35;
+
+  const strenghtValidatorOptions = {
+    returnScore: true,
+    pointsPerUnique: 1,
+    pointsPerRepeat: 0.5,
+    pointsForContainingLower: 10,
+    pointsForContainingUpper: 10,
+    pointsForContainingNumber: 10,
+    pointsForContainingSymbol: 10,
+  };
+  const passwordStrenght = validator.isStrongPassword(
+    password,
+    strenghtValidatorOptions
+  );
+  if (passwordStrenght < minStrenght) {
+    return {
+      error: `Password not strong enough. Strenght ${passwordStrenght}/${minStrenght}. Try lowercase, uppercase, number and simbols`,
+    };
+  }
+  const hash = createHash(password);
+  return hash
+}
 
 const UserModel = mongoose.model("user", userSchema);
 

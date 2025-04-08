@@ -3,10 +3,11 @@ import FrameForm from "../components/layouts/FrameForm";
 import { Link } from "react-router-dom";
 import RegisterEmailForm from "../components/forms/RegisterEmailForm";
 import routes from "../../../shared/routes.js";
+import logo_platform from '../../../shared/images/logos/logo_platform.svg'
 
 const RegisterEmailPage = () => {
   return (
-    <FrameForm title="LABOUR CONNECT">
+    <FrameForm title="" image={logo_platform}>
       <RegisterEmailForm/>
       <p>
         Have an account alredy?
